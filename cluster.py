@@ -22,7 +22,7 @@ def kMeans(file_path):
 
     ax.set_xlabel("Longitude")
     ax.set_ylabel("Latitude")
-    ax.set_title("Station Busyness Clusters")
+    ax.set_title("Station Traffic")
     xMin = stationCoordsDF["start.station.longitude"].min()
     xMax = stationCoordsDF["start.station.longitude"].max()
     yMin = stationCoordsDF["start.station.latitude"].min()
