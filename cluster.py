@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import load
 
-def kMeans(filePath):
-    data = pd.read_csv(filePath)
+def kMeans():
+    data = load.loadData()
     coordsDF = load.getStationCoordinates(data)
 
     stationCounts = data.value_counts(subset = "start.station.id").reset_index(name = "trip_count")
@@ -46,4 +46,4 @@ def kMeans(filePath):
 
     plt.show()
 
-kMeans("bike_data.csv")
+kMeans()

@@ -1,5 +1,9 @@
 import pandas as pd
 
+def loadData():
+    data = pd.read_csv("bike_data.csv")
+    return data
+
 def matchNameToID(data):
     pd.set_option("display.max_columns", None)
     uniqueStations = data.drop_duplicates(subset = ["start.station.id"])
