@@ -1,16 +1,16 @@
-import pandas as pd
+import load
+
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
-df = pd.read_csv("bike_data.csv")
+
+
+data = load.load_file()
 
 #coordinates only
-coords = df[['start.station.latitude', 'start.station.longitude']].dropna()
-
+coords = data[['start.station.latitude', 'start.station.longitude']].dropna()
 X = coords.to_numpy()
-
-#degrees to radians
-X_rad = np.radians(X)
-
+X_rad = np.radians(X) #degrees to radians
 
 earth_radius = 6371.0088
 
@@ -25,10 +25,7 @@ db = DBSCAN(
 )
 
 labels = db.fit_predict(X_rad)
-
 coords['cluster'] = labels
-
-import matplotlib.pyplot as plt
 
 plt.figure(figsize=(8,8))
 plt.scatter(
