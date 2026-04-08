@@ -5,6 +5,8 @@ import csv
 import os
 from dotenv import load_dotenv
 
+import cluster
+
 # ----------------- Load API key -----------------
 load_dotenv(".env")
 API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
@@ -102,6 +104,16 @@ def on_click(event):
     clicked_points.append((lat, lng))
     print(f"Clicked lat/lng: {lat}, {lng} (color={color})")
 
+    # Finds closest clusters to location
+    cluster_amount = 2
+    if color == "red":
+        closest_start_clusters = cluster.get_nearest_start_clusters(lat, lng, cluster_amount)
+        print(closest_start_clusters)
+    elif color == "green":
+        closest_end_clusters = cluster.get_nearest_dest_clusters(lat, lng, cluster_amount)
+        print(closest_end_clusters)
+
+
     radius = 6
     dot_id = canvas.create_oval(
         event.x - radius, event.y - radius,
@@ -125,5 +137,6 @@ def clear_clicks():
 
 clear_button = tk.Button(root, text="Clear Clicks", command=clear_clicks)
 clear_button.pack(pady=10)
+
 
 root.mainloop()

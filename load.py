@@ -15,8 +15,14 @@ def create_start_end_list(data):
     trip_counts = data[['start.station.name', 'end.station.name']].value_counts()
     return trip_counts.to_dict()
 
-def get_station_coordinates(data):
+def get_start_station_coords(data):
     unique_stations = data.drop_duplicates(subset = ["start.station.id"])
     coords = unique_stations[["start.station.id", "start.station.latitude", "start.station.longitude"]].copy()
     coords_sorted = coords.sort_values(by="start.station.id")
+    return coords_sorted
+
+def get_dest_station_coords(data):
+    unique_stations = data.drop_duplicates(subset=["end.station.id"])
+    coords = unique_stations[["end.station.id", "end.station.latitude", "end.station.longitude"]].copy()
+    coords_sorted = coords.sort_values(by="end.station.id")
     return coords_sorted
