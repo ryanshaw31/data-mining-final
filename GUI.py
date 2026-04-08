@@ -22,22 +22,25 @@ with open("bike_data.csv") as f:
             "lng": float(row["start.station.longitude"])
         })
 
-# ----------------- Compute dynamic bounds -----------------
+# ----------------- Map configuration -----------------
+ZOOM = 14
+WIDTH, HEIGHT = 600, 600
+
+# ----------------- Compute dynamic center -----------------
 latitudes = [s["lat"] for s in stations]
 longitudes = [s["lng"] for s in stations]
-
-padding = 0.002  # small padding so points don't sit on edge
-LAT_TOP = max(latitudes) + padding
-LAT_BOTTOM = min(latitudes) - padding
-LNG_LEFT = min(longitudes) - padding
-LNG_RIGHT = max(longitudes) + padding
 
 CENTER_LAT = sum(latitudes) / len(latitudes)
 CENTER_LNG = sum(longitudes) / len(longitudes)
 
-# ----------------- Map configuration -----------------
-ZOOM = 14  #adjust if points are too spread out
-WIDTH, HEIGHT = 600, 600
+# ----------------- Approximate bounds based on zoom -----------------
+# degrees per pixel approximation
+scale = 360 / (2 ** (ZOOM + 8))
+
+LAT_TOP = CENTER_LAT + (HEIGHT / 2) * scale
+LAT_BOTTOM = CENTER_LAT - (HEIGHT / 2) * scale
+LNG_LEFT = CENTER_LNG - (WIDTH / 2) * scale
+LNG_RIGHT = CENTER_LNG + (WIDTH / 2) * scale
 
 
 def pixel_to_latlng(x_pixel, y_pixel):
@@ -85,7 +88,7 @@ dot_ids = []
 # ----------------- Draw all stations -----------------
 for s in stations:
     x, y = latlng_to_pixel(s["lat"], s["lng"])
-    radius = 10  # large, obnoxious
+    radius = 5
     canvas.create_oval(
         x - radius, y - radius, x + radius, y + radius,
         fill="yellow", outline="black", width=2
