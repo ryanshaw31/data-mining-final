@@ -228,5 +228,5 @@ def print_clusters():
 
     plt.show()
 
-if __name__ == "__main__":
-    print_clusters()
+# REMOVE COMMENT BELOW TO SHOW CLUSTER FIGURE
+print_clusters()
