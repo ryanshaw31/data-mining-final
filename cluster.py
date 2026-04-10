@@ -127,4 +127,4 @@ def print_clusters():
     plt.show()
 
 # REMOVE COMMENT BELOW TO SHOW CLUSTER FIGURE
-print_clusters()
+#print_clusters()
