@@ -4,12 +4,18 @@ import requests
 import csv
 import os
 from dotenv import load_dotenv
+from tkinter import messagebox
+
+import cluster
+import AIStuff
 
 # ----------------- Load API key -----------------
+# Support either .env or APIKey.env in the project root.
 load_dotenv(".env")
+load_dotenv("APIKey.env")
 API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 if not API_KEY:
-    raise ValueError("API key not found in .env file")
+    raise ValueError("GOOGLE_MAPS_API_KEY not found in .env or APIKey.env")
 
 # ----------------- Load bike stations from CSV -----------------
 stations = []
@@ -105,6 +111,25 @@ def on_click(event):
     clicked_points.append((lat, lng))
     print(f"Clicked lat/lng: {lat}, {lng} (color={color})")
 
+    # Finds closest clusters to location
+    cluster_amount = 2
+    if color == "red":
+        closest_start_clusters = cluster.get_nearest_start_clusters(lat, lng, cluster_amount)
+        print(closest_start_clusters)
+    elif color == "green":
+        closest_end_clusters = cluster.get_nearest_dest_clusters(lat, lng, cluster_amount)
+        print(closest_end_clusters)
+        start_point = clicked_points[-2]
+        end_point = clicked_points[-1]
+        try:
+            recommendation = AIStuff.generate_recommendation(start_point, end_point, top_n=5)
+            print("\nTop 5 route recommendations:\n")
+            print(recommendation)
+            messagebox.showinfo("Top 5 Route Recommendations", recommendation)
+        except Exception as exc:
+            print(f"Failed to generate AI recommendation: {exc}")
+
+
     radius = 6
     dot_id = canvas.create_oval(
         event.x - radius, event.y - radius,
@@ -128,5 +153,6 @@ def clear_clicks():
 
 clear_button = tk.Button(root, text="Clear Clicks", command=clear_clicks)
 clear_button.pack(pady=10)
+
 
 root.mainloop()
