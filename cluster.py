@@ -94,19 +94,40 @@ def get_top_route_candidates(start_point, end_point, top_n=5, start_candidates=8
         )
 
         routes.append({
+
             "start_station_name": start_row["start.station.name"],
+            "start_station_lat": start_row["start.station.latitude"],
+            "start_station_lng": start_row["start.station.longitude"],
+
             "end_station_name": end_row["end.station.name"],
-            "distance_to_start_station_miles": round(start_row["distance_to_start_miles"], 3),
-            "route_distance_miles": round(route_distance_miles, 3),
-            "distance_from_end_station_miles": round(end_row["distance_from_end_miles"], 3),
+            "end_station_lat": end_row["end.station.latitude"],
+            "end_station_lng": end_row["end.station.longitude"],
+
+            "distance_to_start_station_miles": round(
+                start_row["distance_to_start_miles"], 3
+            ),
+
+            "route_distance_miles": round(
+                route_distance_miles, 3
+            ),
+
+            "distance_from_end_station_miles": round(
+                end_row["distance_from_end_miles"], 3
+            ),
+
             "total_access_distance_miles": round(
-                start_row["distance_to_start_miles"] + route_distance_miles + end_row["distance_from_end_miles"],
+                start_row["distance_to_start_miles"]
+                + route_distance_miles
+                + end_row["distance_from_end_miles"],
                 3
             ),
+
             "start_station_availability": start_row["availability"],
             "end_station_availability": end_row["availability"],
+
             "start_station_trip_count": int(start_row["trip_count"]),
             "end_station_trip_count": int(end_row["trip_count"]),
+
             "score": round(score, 3)
         })
 
